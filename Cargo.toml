@@ -1,0 +1,12 @@
+[package]
+
+name = "fetcher"
+version = "0.0.1"
+license = "MIT"
+authors = ["David Barnett <david@barnett.net.nz>"]
+
+[dependencies]
+hyper = "0.1.13"
+rustc-serialize = "0.2.14"
+# log = "*"
+# env_logger = "*"
