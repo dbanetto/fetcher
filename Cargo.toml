@@ -5,8 +5,17 @@ version = "0.0.1"
 license = "MIT"
 authors = ["David Barnett <david@barnett.net.nz>"]
 
+[lib]
+name = "fetcher"
+path = "src/lib.rs"
+
+[[bin]]
+name = "fetchd"
+path = "src/main.rs"
+
 [dependencies]
-hyper = "0.1.13"
-rustc-serialize = "0.2.14"
+hyper = "*"
+url = "*"
+rustc-serialize = "*"
 # log = "*"
 # env_logger = "*"
