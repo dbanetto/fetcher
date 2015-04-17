@@ -1,16 +1,11 @@
-#![feature(core)]
-#![feature(rustc_private)]
-
 extern crate hyper;
-extern crate core;
-extern crate serialize;
+extern crate rustc_serialize;
 extern crate fetcher;
 
 use std::io::Read;
 
-use core::str::FromStr;
 
-use serialize::json::Json;
+use rustc_serialize::json::Json;
 
 use fetcher::client::Client;
 
