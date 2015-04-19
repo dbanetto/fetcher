@@ -42,29 +42,28 @@ impl Client {
     ///
     ///
     ///
-    fn build_url(&self, to_add: &str) -> Url {
-        let mut build_url = self.url.clone();
-        {
-            let build_url_path = build_url.path_mut().unwrap();
-            if build_url_path.len() >= 1 &&
-                build_url_path[build_url_path.len() - 1] == "" {
-                    build_url_path.pop();
-            }
-
-            for part in to_add.split("/") {
-                if part != "" {
-                    build_url_path.push(part.to_string());
-                }
-            }
+    fn build_url(&self, to_add: &str) -> Result<Url, ParseError> {
+        let base_url = &self.url.to_string();
+        let new_url: String;
+        if base_url.ends_with('/') ^ to_add.starts_with('/') {
+            // One trailing or starting '/'
+            new_url = format!("{}{}", base_url, to_add).to_string();
+        } else if base_url.ends_with('/') && to_add.starts_with('/') {
+            // Pair of trailing and starting '/'
+            new_url = format!("{}{}", base_url.trim_right_matches('/'), to_add).to_string();
+        } else {
+            // No trailing or starting '/'
+            new_url = format!("{}/{}", base_url, to_add).to_string();
         }
-        return build_url;
+
+        Url::parse(&new_url)
     }
 
     ///
     ///
     ///
     pub fn get(&mut self, path: &str) -> HttpResult<Response> {
-        let full_url = self.build_url(path);
+        let full_url = self.build_url(path).unwrap();
         self.client.get(full_url)
             // set a header
             .header(Connection(vec![ConnectionOption::Close]))
@@ -76,21 +75,21 @@ impl Client {
     ///
     ///
     ///
-    pub fn get_series() -> Result<(), ()> {
+    pub fn get_series(&mut self) -> Result<(), ()> {
         unimplemented!();
     }
 
     ///
     ///
     ///
-    pub fn get_providers() -> Result<(), ()> {
+    pub fn get_providers(&mut self) -> Result<(), ()> {
         unimplemented!();
     }
 
     ///
     ///
     ///
-    pub fn get_base_providers() -> Result<(), ()> {
+    pub fn get_base_providers(&mut self) -> Result<(), ()> {
         unimplemented!();
     }
 
@@ -99,6 +98,7 @@ impl Client {
 #[cfg(test)]
 mod test{
     extern crate url;
+    use url::Url;
     use super::*;
 
 
@@ -108,11 +108,12 @@ mod test{
                 ("http://e.co", "/p/t/f.html", "http://e.co/p/t/f.html"),
                 ("http://e.co/", "/p/t/f.html", "http://e.co/p/t/f.html"),
                 ("http://e.co", "p/t/f.html", "http://e.co/p/t/f.html"),
+                ("http://e.co", "p/t/f.html?var=1", "http://e.co/p/t/f.html?var=1"),
             ] {
             let c = Client::new(url).unwrap();
             let built_url = c.build_url(path);
-            assert!(Url::parse(built).unwrap() == built_url,
-                    "assertion failed: url:{} path:{} built:{}", url, path, built);
+            assert!(Url::parse(built).unwrap() == built_url.unwrap(),
+                    "assertion failed: url:{} path:{} built:{} expected:{}", url, path, built, Url::parse(built).unwrap());
         }
     }
 }

@@ -23,6 +23,7 @@ fn load_settings() -> Settings {
     json::decode::<Settings>(&settings_content).unwrap()
 }
 
+#[cfg(not(test))]
 fn main() {
     let settings = load_settings();
 
