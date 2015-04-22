@@ -1,5 +1,7 @@
+//! A Web client to Fetcher Web UI
+//!
+//!
 
-// use self::core::str::FromStr;
 use url::{Url, ParseError};
 
 use hyper;
@@ -25,8 +27,13 @@ pub struct Client {
 impl Client {
 
     ///
+    /// #Example
     ///
+    /// ```
+    /// use fetcher::client::Client;
     ///
+    /// let client = Client::new("http://127.0.0.1/").unwrap();
+    /// ```
     pub fn new(url: &str) -> Result<Client, ParseError> {
         let url_parsed = match Url::parse(url) {
             Ok(u) => u,
@@ -59,16 +66,24 @@ impl Client {
         Url::parse(&new_url)
     }
 
+    /// Raw access to using the HTTP `GET` method at a given `path`
+    /// from the base url given at construction.
     ///
+    /// #Example
     ///
+    /// ```
+    /// use fetcher::client::Client;
     ///
+    /// let mut client = Client::new("http://127.0.0.1/").unwrap();
+    ///
+    /// client.get("/api/");
+    /// ```
     pub fn get(&mut self, path: &str) -> HttpResult<Response> {
+        // FIXME: build_url cannot be asserted to be valid
         let full_url = self.build_url(path).unwrap();
         self.client.get(full_url)
-            // set a header
             .header(Connection(vec![ConnectionOption::Close]))
             .header(ContentType("application/json".parse::<Mime>().unwrap()))
-            // let 'er go!
             .send()
     }
 
@@ -113,7 +128,7 @@ mod test{
             let c = Client::new(url).unwrap();
             let built_url = c.build_url(path);
             assert!(Url::parse(built).unwrap() == built_url.unwrap(),
-                    "assertion failed: url:{} path:{} built:{} expected:{}", url, path, built, Url::parse(built).unwrap());
+                    "assertion failed: url:{} path:{} built:{} != expected:{}", url, path, built, Url::parse(built).unwrap());
         }
     }
 }
