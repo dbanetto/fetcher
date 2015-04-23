@@ -123,6 +123,7 @@ mod test{
                 ("http://e.co", "/p/t/f.html", "http://e.co/p/t/f.html"),
                 ("http://e.co/", "/p/t/f.html", "http://e.co/p/t/f.html"),
                 ("http://e.co", "p/t/f.html", "http://e.co/p/t/f.html"),
+                ("http://e.co:8080", "p/t/f.html", "http://e.co:8080/p/t/f.html"),
                 ("http://e.co", "p/t/f.html?var=1", "http://e.co/p/t/f.html?var=1"),
             ] {
             let c = Client::new(url).unwrap();
