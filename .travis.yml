@@ -10,7 +10,6 @@ cache:
 script:
     - cargo build
     - cargo test
-    - cargo bench
 
 after_success: |
     [ $TRAVIS_BRANCH = master ] &&
@@ -21,3 +20,7 @@ after_success: |
     pip install --user ghp-import &&
     /home/travis/.local/bin/ghp-import -n target/doc &&
     git push -fq https://${TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+
+env:
+  global:
+    secure: GyAGqVHVnFEbOPd9VI646sFHtUQa2XM9YuWduG6dsydkGQCJ458Brk7e96EdDt/6UVjtrN90+VwyM6ICIAhMQyqaa6hMBkmq4i0BCt5jsO3pBNWzbrid0Y/1GcxpMQI+0fwP7ElEIpNQ4mTjJGyrt2iKUS/FnYJBtA8aC5z4qys=
