@@ -1,5 +1,7 @@
 # Fetcher
 
+[![Build Status](https://travis-ci.org/zyphrus/fetcher.svg)](https://travis-ci.org/zyphrus/fetcher)
+
 An automated media fetcher written in rust.
 Primarily used for getting scheduled released content like
 podcasts or web series.
