@@ -1,0 +1,20 @@
+language: rust
+
+cache:
+    directories:
+        - target
+
+script:
+    - cargo build
+    - cargo test
+    - cargo bench
+
+after_success: |
+    [ $TRAVIS_BRANCH = master ] &&
+    [ $TRAVIS_PULL_REQUEST = false ] &&
+    cargo doc &&
+    echo '<meta http-equiv=refresh content=0;url=fetcher/index.html>' > target/doc/index.html &&
+    git shortlog -s -n | cut -c 8- > target/doc/humans.txt &&
+    pip install --user ghp-import &&
+    /home/travis/.local/bin/ghp-import -n target/doc &&
+    git push -fq https://${TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages

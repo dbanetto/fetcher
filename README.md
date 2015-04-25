@@ -1,6 +1,18 @@
 # Fetcher
 
-A rust powered automated media fetcher
+An automated media fetcher written in rust.
+Primarily used for getting scheduled released content like
+podcasts or web series.
+
+This repo provides two binaries `libfetcher` and `fetchd`
+
+### libfecther
+
+To provide a library for fetcher
+
+### fetchd
+
+A daemon to fetch periodically
 
 ## Goal
 
