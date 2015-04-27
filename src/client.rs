@@ -2,6 +2,7 @@
 //!
 //!
 
+use std::io::Read;
 use url::{Url, ParseError};
 
 use hyper;
@@ -12,6 +13,19 @@ use hyper::header::Connection;
 use hyper::header::ConnectionOption;
 use hyper::error::HttpResult;
 
+use rustc_serialize::json;
+use rustc_serialize::json::Json;
+
+#[derive(RustcDecodable, RustcEncodable)]
+pub struct Series {
+    pub title: String,
+    pub provider_id: i32,
+    pub search_title: String,
+    pub current_count: i32,
+    pub total_count: i32,
+    pub media_type: String,
+    // media_type_options: Map<String, String>,
+}
 
 ///
 ///
@@ -87,11 +101,45 @@ impl Client {
             .send()
     }
 
+    /// Get a list of Series
     ///
+    /// # Example
     ///
+    /// ```
+    /// use fetcher::client::Client;
     ///
-    pub fn get_series(&mut self) -> Result<(), ()> {
-        unimplemented!();
+    /// let mut client = Client::new("http://127.0.0.1/").unwrap();
+    ///
+    /// client.get_series();
+    /// ```
+    pub fn get_series(&mut self) -> Result<Vec<self::Series>, String> {
+        let mut res = match self.get("/series?format=fetch") {
+            Ok(r) => r,
+            Err(e) => return Err(format!("Error during GET: {}", e)),
+        };
+
+        let mut body = String::new();
+        res.read_to_string(&mut body).unwrap();
+
+        let mut series = vec![];
+
+        match Json::from_str(&body) {
+            Ok(series_json) => match series_json {
+                Json::Array(arr) => {
+                    for obj in arr {
+                        let s = match json::decode::<Series>(&format!("{}", obj)) { // FIXME: There has to be a better way
+                            Ok(val) => val,
+                            Err(e)  => return Err(format!("JSON decode error: {}", e)),
+                        };
+                        series.push(s);
+                    }
+                },
+                other => return Err(format!("Expected Array but got {:?}", other)),
+            },
+            Err(e) => return Err(format!("JSON parse error: {}", e)),
+        };
+
+        Ok(series)
     }
 
     ///
@@ -131,5 +179,12 @@ mod test{
             assert!(Url::parse(built).unwrap() == built_url.unwrap(),
                     "assertion failed: url:{} path:{} built:{} != expected:{}", url, path, built, Url::parse(built).unwrap());
         }
+    }
+
+    #[test]
+    fn test_get_series() {
+        let mut client = Client::new("http://127.0.0.1:8000/").unwrap();
+        // TODO: Check if a valid server exists at address, if not skip test
+        client.get_series();
     }
 }

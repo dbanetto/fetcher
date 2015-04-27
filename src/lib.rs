@@ -4,5 +4,6 @@
 
 extern crate hyper;
 extern crate url;
+extern crate rustc_serialize;
 
 pub mod client;

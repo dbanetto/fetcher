@@ -31,24 +31,8 @@ fn main() {
     let mut client = Client::new(&settings.fetch_url).unwrap();
 
     // get '/series/'
-    let mut res = client.get("series").unwrap();
-
-    // Read the Response.
-    let mut body = String::new();
-    res.read_to_string(&mut body).unwrap();
-
-
-    if res.status.is_success() {
-        match Json::from_str(&body).unwrap() {
-            Json::Array(arr) => {
-                for i in arr {
-                    println!("Object: {}\n", i);
-                }
-            },
-            _ => {},
-        }
-    } else {
-        println!("Response: {}", body);
+    for series in client.get_series().unwrap() {
+        println!("{} {}/{}", series.title, series.current_count, series.total_count);
     }
-    println!("Status: {0}", res.status);
+
 }
