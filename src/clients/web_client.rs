@@ -1,7 +1,6 @@
 //! A Web client to Fetcher Web UI
 //!
 //!
-
 use std::io::Read;
 use url::{Url, ParseError};
 
@@ -16,45 +15,32 @@ use hyper::error::HttpResult;
 use rustc_serialize::json;
 use rustc_serialize::json::Json;
 
-#[derive(RustcDecodable, RustcEncodable)]
-pub struct Series {
-    pub title: String,
-    pub provider_id: i32,
-    pub search_title: String,
-    pub current_count: i32,
-    pub total_count: i32,
-    pub media_type: String,
-    // media_type_options: Map<String, String>,
-}
+use clients::{Client, Series};
 
 ///
 ///
 ///
-pub struct Client {
+pub struct WebClient {
     url: Url,
     client: hyper::Client,
 }
 
-///
-///
-///
-impl Client {
-
+impl WebClient {
     ///
     /// #Example
     ///
     /// ```
-    /// use fetcher::client::Client;
+    /// use fetcher::clients::WebClient;
     ///
-    /// let client = Client::new("http://127.0.0.1/").unwrap();
+    /// let client = WebClient::new("http://127.0.0.1/").unwrap();
     /// ```
-    pub fn new(url: &str) -> Result<Client, ParseError> {
+    pub fn new(url: &str) -> Result<WebClient, ParseError> {
         let url_parsed = match Url::parse(url) {
             Ok(u) => u,
             Err(e) => return Err(e),
         };
 
-        Ok(Client {
+        Ok(WebClient {
             url: url_parsed,
             client: hyper::Client::new(),
         })
@@ -86,9 +72,10 @@ impl Client {
     /// #Example
     ///
     /// ```
-    /// use fetcher::client::Client;
+    /// use fetcher::clients::Client;
+    /// use fetcher::clients::WebClient;
     ///
-    /// let mut client = Client::new("http://127.0.0.1/").unwrap();
+    /// let mut client = WebClient::new("http://127.0.0.1/").unwrap();
     ///
     /// client.get("/api/");
     /// ```
@@ -100,19 +87,27 @@ impl Client {
             .header(ContentType("application/json".parse::<Mime>().unwrap()))
             .send()
     }
+}
+
+///
+///
+///
+impl Client for WebClient {
+
 
     /// Get a list of Series
     ///
     /// # Example
     ///
     /// ```
-    /// use fetcher::client::Client;
+    /// use fetcher::clients::Client;
+    /// use fetcher::clients::WebClient;
     ///
-    /// let mut client = Client::new("http://127.0.0.1/").unwrap();
+    /// let mut client = WebClient::new("http://127.0.0.1/").unwrap();
     ///
     /// client.get_series();
     /// ```
-    pub fn get_series(&mut self) -> Result<Vec<self::Series>, String> {
+    fn get_series(&mut self) -> Result<Vec<Series>, String> {
         let mut res = match self.get("/series?format=fetch") {
             Ok(r) => r,
             Err(e) => return Err(format!("Error during GET: {}", e)),
@@ -138,21 +133,20 @@ impl Client {
             },
             Err(e) => return Err(format!("JSON parse error: {}", e)),
         };
-
         Ok(series)
     }
 
     ///
     ///
     ///
-    pub fn get_providers(&mut self) -> Result<(), ()> {
+    fn get_providers(&mut self) -> Result<(), ()> {
         unimplemented!();
     }
 
     ///
     ///
     ///
-    pub fn get_base_providers(&mut self) -> Result<(), ()> {
+    fn get_base_providers(&mut self) -> Result<(), ()> {
         unimplemented!();
     }
 
@@ -161,7 +155,9 @@ impl Client {
 #[cfg(test)]
 mod test{
     extern crate url;
+
     use url::Url;
+    use clients::Client;
     use super::*;
 
 
@@ -174,7 +170,7 @@ mod test{
                 ("http://e.co:8080", "p/t/f.html", "http://e.co:8080/p/t/f.html"),
                 ("http://e.co", "p/t/f.html?var=1", "http://e.co/p/t/f.html?var=1"),
             ] {
-            let c = Client::new(url).unwrap();
+            let c = WebClient::new(url).unwrap();
             let built_url = c.build_url(path);
             assert!(Url::parse(built).unwrap() == built_url.unwrap(),
                     "assertion failed: url:{} path:{} built:{} != expected:{}", url, path, built, Url::parse(built).unwrap());
@@ -183,8 +179,8 @@ mod test{
 
     #[test]
     fn test_get_series() {
-        let mut client = Client::new("http://127.0.0.1:8000/").unwrap();
-        // TODO: Check if a valid server exists at address, if not skip test
+        let mut client = WebClient::new("http://127.0.0.1:8000/").unwrap();
+        // TODO: Check if a valid server exists, if not skip test
         client.get_series();
     }
 }

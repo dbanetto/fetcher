@@ -8,7 +8,8 @@ use std::fs::File;
 use rustc_serialize::json;
 use rustc_serialize::json::Json;
 
-use fetcher::client::Client;
+use fetcher::clients::WebClient;
+use fetcher::clients::Client;
 
 #[derive(RustcDecodable)]
 struct Settings {
@@ -28,7 +29,7 @@ fn main() {
     let settings = load_settings();
 
     // Create a client to fetch Web UI
-    let mut client = Client::new(&settings.fetch_url).unwrap();
+    let mut client = WebClient::new(&settings.fetch_url).unwrap();
 
     // get '/series/'
     for series in client.get_series().unwrap() {
