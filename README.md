@@ -1,6 +1,7 @@
 # Fetcher
 
 [![Build Status](https://travis-ci.org/zyphrus/fetcher.svg)](https://travis-ci.org/zyphrus/fetcher)
+[![Coverage Status](https://coveralls.io/repos/zyphrus/fetcher/badge.svg)](https://coveralls.io/r/zyphrus/fetcher)
 
 An automated media fetcher written in rust.
 Primarily used for getting scheduled released content like
