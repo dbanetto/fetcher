@@ -15,7 +15,7 @@ use hyper::error::HttpResult;
 use rustc_serialize::json;
 use rustc_serialize::json::Json;
 
-use clients::{Client, Series};
+use clients::{Client, Series, Provider, BaseProvider};
 
 ///
 ///
@@ -139,14 +139,14 @@ impl Client for WebClient {
     ///
     ///
     ///
-    fn get_providers(&mut self) -> Result<(), ()> {
+    fn get_providers(&mut self) -> Result<Vec<Provider>, ()> {
         unimplemented!();
     }
 
     ///
     ///
     ///
-    fn get_base_providers(&mut self) -> Result<(), ()> {
+    fn get_base_providers(&mut self) -> Result<Vec<BaseProvider>, ()> {
         unimplemented!();
     }
 

@@ -3,17 +3,37 @@ extern crate rustc_serialize;
 extern crate fetcher;
 
 use std::io::Read;
+
 use std::fs::File;
 
+use std::collections::BTreeMap;
+
 use rustc_serialize::json;
-use rustc_serialize::json::Json;
 
 use fetcher::clients::WebClient;
 use fetcher::clients::Client;
 
+
 #[derive(RustcDecodable)]
 struct Settings {
+    // Possible changes:
+    //  fetch_save_paths '*', the default, is replaced with
+    //  fetch_save_path_default
+    //
+    //  sort_save_path allows media_type specific paths
+    //  and renamed to sort_save_paths, String -> <String,String>
+    //
+    //  sort_search_path allows for media_type specific paths
+    //  [String] -> <String, [String]>
+    //
+
+    // fetching settings
     fetch_url: String,
+    fetch_save_paths: BTreeMap<String, String>,
+
+    // sorting settings
+    sort_save_path: String,
+    sort_search_paths: Vec<String>,
 }
 
 fn load_settings() -> Settings {
