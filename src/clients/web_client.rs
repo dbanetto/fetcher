@@ -2,6 +2,8 @@
 //!
 //!
 use std::io::Read;
+use std::cell::RefCell;
+use std::rc::Rc;
 use url::{Url, ParseError};
 
 use hyper;
@@ -10,7 +12,6 @@ use hyper::header::ContentType;
 use hyper::mime::Mime;
 use hyper::header::Connection;
 use hyper::header::ConnectionOption;
-use hyper::error::HttpResult;
 
 use rustc_serialize::json;
 use rustc_serialize::json::Json;
@@ -22,7 +23,7 @@ use clients::{Client, Series, Provider, BaseProvider};
 ///
 pub struct WebClient {
     url: Url,
-    client: hyper::Client,
+    client: Rc<RefCell<hyper::Client>>,
 }
 
 impl WebClient {
@@ -42,7 +43,7 @@ impl WebClient {
 
         Ok(WebClient {
             url: url_parsed,
-            client: hyper::Client::new(),
+            client: Rc::new(RefCell::new(hyper::Client::new())),
         })
     }
 
@@ -75,14 +76,14 @@ impl WebClient {
     /// use fetcher::clients::Client;
     /// use fetcher::clients::WebClient;
     ///
-    /// let mut client = WebClient::new("http://127.0.0.1/").unwrap();
+    /// let client = WebClient::new("http://127.0.0.1/").unwrap();
     ///
     /// client.get("/api/");
     /// ```
-    pub fn get(&mut self, path: &str) -> HttpResult<Response> {
+    pub fn get(&self, path: &str) -> hyper::error::Result<Response> {
         // FIXME: build_url cannot be asserted to be valid
         let full_url = self.build_url(path).unwrap();
-        self.client.get(full_url)
+        self.client.borrow_mut().get(full_url)
             .header(Connection(vec![ConnectionOption::Close]))
             .header(ContentType("application/json".parse::<Mime>().unwrap()))
             .send()
@@ -103,11 +104,11 @@ impl Client for WebClient {
     /// use fetcher::clients::Client;
     /// use fetcher::clients::WebClient;
     ///
-    /// let mut client = WebClient::new("http://127.0.0.1/").unwrap();
+    /// let client = WebClient::new("http://127.0.0.1/").unwrap();
     ///
     /// client.get_series();
     /// ```
-    fn get_series(&mut self) -> Result<Vec<Series>, String> {
+    fn get_series(&self) -> Result<Vec<Series>, String> {
         let mut res = match self.get("/series?format=fetch") {
             Ok(r) => r,
             Err(e) => return Err(format!("Error during GET: {}", e)),
@@ -139,14 +140,14 @@ impl Client for WebClient {
     ///
     ///
     ///
-    fn get_providers(&mut self) -> Result<Vec<Provider>, ()> {
+    fn get_providers(&self) -> Result<Vec<Provider>, ()> {
         unimplemented!();
     }
 
     ///
     ///
     ///
-    fn get_base_providers(&mut self) -> Result<Vec<BaseProvider>, ()> {
+    fn get_base_providers(&self) -> Result<Vec<BaseProvider>, ()> {
         unimplemented!();
     }
 
@@ -179,7 +180,7 @@ mod test{
 
     #[test]
     fn test_get_series() {
-        let mut client = WebClient::new("http://127.0.0.1:8000/").unwrap();
+        let client = WebClient::new("http://127.0.0.1:8000/").unwrap();
         // TODO: Check if a valid server exists, if not skip test
         client.get_series();
     }

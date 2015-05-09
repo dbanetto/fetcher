@@ -1,11 +1,9 @@
 {
-	"fetch_url": "http://127.0.0.1",
+	"fetch_url": "http://127.0.0.1:8000",
 	"fetch_save_paths": {
 		"*": "./unsorted",
 		"podcasts": "./podcasts"
 	},
-	"sort_save_paths": {
-		"*": "./sorted"
-	},
+	"sort_save_path": "./sorted",
 	"sort_search_paths": ["./unsorted"]
 }

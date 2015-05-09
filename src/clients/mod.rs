@@ -13,7 +13,7 @@ pub struct Series {
     pub current_count: i32,
     pub total_count: i32,
     pub media_type: String,
-    // pub media_type_options: Json::Object, FIXME: not decodable
+    // pub media_type_options: Json::Object, //FIXME: not decodable
 }
 
 ///
@@ -45,15 +45,15 @@ pub trait Client {
     ///
     ///
     ///
-    fn get_series(&mut self) -> Result<Vec<self::Series>, String>;
+    fn get_series(&self) -> Result<Vec<self::Series>, String>;
 
     ///
     ///
     ///
-    fn get_providers(&mut self) -> Result<Vec<self::Provider>, ()>;
+    fn get_providers(&self) -> Result<Vec<self::Provider>, ()>;
 
     ///
     ///
     ///
-    fn get_base_providers(&mut self) -> Result<Vec<self::BaseProvider>, ()>;
+    fn get_base_providers(&self) -> Result<Vec<self::BaseProvider>, ()>;
 }
