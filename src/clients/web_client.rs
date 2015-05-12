@@ -109,7 +109,7 @@ impl Client for WebClient {
     /// client.get_series();
     /// ```
     fn get_series(&self) -> Result<Vec<Series>, String> {
-        let mut res = match self.get("/series?format=fetch") {
+        let mut res = match self.get("/series/?format=fetch") {
             Ok(r) => r,
             Err(e) => return Err(format!("Error during GET: {}", e)),
         };
@@ -123,9 +123,9 @@ impl Client for WebClient {
             Ok(series_json) => match series_json {
                 Json::Array(arr) => {
                     for obj in arr {
-                        let s = match json::decode::<Series>(&format!("{}", obj)) { // FIXME: There has to be a better way
+                        let s = match Series::parse(&obj) {
                             Ok(val) => val,
-                            Err(e)  => return Err(format!("JSON decode error: {}", e)),
+                            Err(e)  => return Err(format!("JSON decode error: {} in {}", e, obj )),
                         };
                         series.push(s);
                     }
@@ -140,15 +140,65 @@ impl Client for WebClient {
     ///
     ///
     ///
-    fn get_providers(&self) -> Result<Vec<Provider>, ()> {
-        unimplemented!();
+    fn get_providers(&self) -> Result<Vec<Provider>, String> {
+        let mut res = match self.get("/provider/?format=fetch") {
+            Ok(r) => r,
+            Err(e) => return Err(format!("Error during GET: {}", e)),
+        };
+
+        let mut body = String::new();
+        res.read_to_string(&mut body).unwrap();
+
+        let mut provs = vec![];
+
+        match Json::from_str(&body) {
+            Ok(prov_json) => match prov_json {
+                Json::Array(arr) => {
+                    for obj in arr {
+                        let s = match Provider::parse(&obj) {
+                            Ok(val) => val,
+                            Err(e)  => return Err(format!("JSON decode error: {} in {}", e, obj )),
+                        };
+                        provs.push(s);
+                    }
+                },
+                other => return Err(format!("Expected Array but got {:?}", other)),
+            },
+            Err(e) => return Err(format!("JSON parse error: {}", e)),
+        };
+        Ok(provs)
     }
 
     ///
     ///
     ///
-    fn get_base_providers(&self) -> Result<Vec<BaseProvider>, ()> {
-        unimplemented!();
+    fn get_base_providers(&self) -> Result<Vec<BaseProvider>, String> {
+        let mut res = match self.get("/provider/base/?format=fetch") {
+            Ok(r) => r,
+            Err(e) => return Err(format!("Error during GET: {}", e)),
+        };
+
+        let mut body = String::new();
+        res.read_to_string(&mut body).unwrap();
+
+        let mut provs = vec![];
+
+        match Json::from_str(&body) {
+            Ok(prov_json) => match prov_json {
+                Json::Array(arr) => {
+                    for obj in arr {
+                        let s = match BaseProvider::parse(&obj) {
+                            Ok(val) => val,
+                            Err(e)  => return Err(format!("JSON decode error: {} in {}", e, obj )),
+                        };
+                        provs.push(s);
+                    }
+                },
+                other => return Err(format!("Expected Array but got {:?}", other)),
+            },
+            Err(e) => return Err(format!("JSON parse error: {}", e)),
+        };
+        Ok(provs)
     }
 
 }
@@ -183,5 +233,19 @@ mod test{
         let client = WebClient::new("http://127.0.0.1:8000/").unwrap();
         // TODO: Check if a valid server exists, if not skip test
         client.get_series();
+    }
+
+    #[test]
+    fn test_get_providers() {
+        let client = WebClient::new("http://127.0.0.1:8000/").unwrap();
+        // TODO: Check if a valid server exists, if not skip test
+        client.get_providers();
+    }
+
+    #[test]
+    fn test_get_base_providers() {
+        let client = WebClient::new("http://127.0.0.1:8000/").unwrap();
+        // TODO: Check if a valid server exists, if not skip test
+        client.get_base_providers();
     }
 }

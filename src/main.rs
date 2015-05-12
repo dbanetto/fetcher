@@ -49,11 +49,21 @@ fn main() {
     let settings = load_settings();
 
     // Create a client to fetch Web UI
-    let mut client = WebClient::new(&settings.fetch_url).unwrap();
+    let client = WebClient::new(&settings.fetch_url).unwrap();
 
-    // get '/series/'
+    println!("Base Providers");
+    for base in client.get_base_providers().unwrap() {
+        println!("\t{}", base.name);
+    }
+
+    println!("\nProviders");
+    for prov in client.get_providers().unwrap() {
+        println!("\t{} {} ({})",prov.id , prov.name, prov.base_provider);
+    }
+
+    println!("\nSeries");
     for series in client.get_series().unwrap() {
-        println!("{} {}/{}", series.title, series.current_count, series.total_count);
+        println!("\t{}", series.title);
     }
 
 }
