@@ -83,10 +83,12 @@ impl WebClient {
     pub fn get(&self, path: &str) -> hyper::error::Result<Response> {
         // FIXME: build_url cannot be asserted to be valid
         let full_url = self.build_url(path).unwrap();
-        self.client.borrow_mut().get(full_url)
+        let mut m_client = self.client.borrow_mut();
+        let res = m_client.get(full_url)
             .header(Connection(vec![ConnectionOption::Close]))
             .header(ContentType("application/json".parse::<Mime>().unwrap()))
-            .send()
+            .send();
+        res
     }
 }
 
