@@ -4,6 +4,9 @@ version = "0.0.1"
 license = "MIT"
 authors = ["David Barnett <david@barnett.net.nz>"]
 
+[features]
+unstable = []
+
 [lib]
 name = "fetcher"
 path = "src/lib.rs"
