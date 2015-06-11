@@ -23,7 +23,6 @@ use clients::{Client, Series, Provider, BaseProvider};
 ///
 pub struct WebClient {
     url: Url,
-    client: Rc<RefCell<hyper::Client>>,
 }
 
 impl WebClient {
@@ -43,7 +42,6 @@ impl WebClient {
 
         Ok(WebClient {
             url: url_parsed,
-            client: Rc::new(RefCell::new(hyper::Client::new())),
         })
     }
 
@@ -83,8 +81,8 @@ impl WebClient {
     pub fn get(&self, path: &str) -> hyper::error::Result<Response> {
         // FIXME: build_url cannot be asserted to be valid
         let full_url = self.build_url(path).unwrap();
-        let mut m_client = self.client.borrow_mut();
-        let res = m_client.get(full_url)
+        let mut client = hyper::Client::new();
+        let res = client.get(full_url)
             .header(Connection(vec![ConnectionOption::Close]))
             .header(ContentType("application/json".parse::<Mime>().unwrap()))
             .send();
