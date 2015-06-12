@@ -16,7 +16,7 @@ use hyper::header::ConnectionOption;
 use rustc_serialize::json;
 use rustc_serialize::json::Json;
 
-use clients::{Client, Series, Provider, BaseProvider};
+use clients::{Client, SeriesData, ProviderData, BaseProviderData};
 
 ///
 ///
@@ -96,7 +96,7 @@ impl WebClient {
 impl Client for WebClient {
 
 
-    /// Get a list of Series
+    /// Get a list of SeriesData
     ///
     /// # Example
     ///
@@ -108,7 +108,7 @@ impl Client for WebClient {
     ///
     /// client.get_series();
     /// ```
-    fn get_series(&self) -> Result<Vec<Series>, String> {
+    fn get_series(&self) -> Result<Vec<SeriesData>, String> {
         let mut res = match self.get("/series/?format=fetch") {
             Ok(r) => r,
             Err(e) => return Err(format!("Error during GET: {}", e)),
@@ -121,7 +121,7 @@ impl Client for WebClient {
             Ok(series_json) => match series_json {
                 Json::Array(arr) => {
                     arr.iter().filter_map(|obj| {
-                        match Series::parse(&obj) {
+                        match SeriesData::parse(&obj) {
                             Ok(val) => Some(val),
                             Err(e)  => {
                                 println!("JSON decode error: {} in {}", e, obj);
@@ -140,7 +140,7 @@ impl Client for WebClient {
     ///
     ///
     ///
-    fn get_providers(&self) -> Result<Vec<Provider>, String> {
+    fn get_providers(&self) -> Result<Vec<ProviderData>, String> {
         let mut res = match self.get("/provider/?format=fetch") {
             Ok(r) => r,
             Err(e) => return Err(format!("Error during GET: {}", e)),
@@ -153,7 +153,7 @@ impl Client for WebClient {
             Ok(prov_json) => match prov_json {
                 Json::Array(arr) => {
                     arr.iter().filter_map(|obj| {
-                        match Provider::parse(&obj) {
+                        match ProviderData::parse(&obj) {
                             Ok(val) => Some(val),
                             Err(e)  => {
                                 print!("JSON decode error: {} in {}", e, obj );
@@ -172,7 +172,7 @@ impl Client for WebClient {
     ///
     ///
     ///
-    fn get_base_providers(&self) -> Result<Vec<BaseProvider>, String> {
+    fn get_base_providers(&self) -> Result<Vec<BaseProviderData>, String> {
         let mut res = match self.get("/provider/base/?format=fetch") {
             Ok(r) => r,
             Err(e) => return Err(format!("Error during GET: {}", e)),
@@ -185,7 +185,7 @@ impl Client for WebClient {
             Ok(prov_json) => match prov_json {
                 Json::Array(arr) => {
                     arr.iter().filter_map(|obj| {
-                        match BaseProvider::parse(&obj) {
+                        match BaseProviderData::parse(&obj) {
                             Ok(val) => Some(val),
                             Err(e)  => {
                                 println!("JSON decode error: {} in {}", e, obj );
