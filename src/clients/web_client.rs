@@ -117,18 +117,18 @@ impl Client for WebClient {
         let mut body = String::new();
         res.read_to_string(&mut body).unwrap();
 
-        let mut series = vec![];
-
-        match Json::from_str(&body) {
+        let series = match Json::from_str(&body) {
             Ok(series_json) => match series_json {
                 Json::Array(arr) => {
-                    for obj in arr {
-                        let s = match Series::parse(&obj) {
-                            Ok(val) => val,
-                            Err(e)  => return Err(format!("JSON decode error: {} in {}", e, obj )),
-                        };
-                        series.push(s);
-                    }
+                    arr.iter().filter_map(|obj| {
+                        match Series::parse(&obj) {
+                            Ok(val) => Some(val),
+                            Err(e)  => {
+                                println!("JSON decode error: {} in {}", e, obj);
+                                None
+                            },
+                        }
+                    }).collect()
                 },
                 other => return Err(format!("Expected Array but got {:?}", other)),
             },
@@ -149,18 +149,18 @@ impl Client for WebClient {
         let mut body = String::new();
         res.read_to_string(&mut body).unwrap();
 
-        let mut provs = vec![];
-
-        match Json::from_str(&body) {
+        let provs = match Json::from_str(&body) {
             Ok(prov_json) => match prov_json {
                 Json::Array(arr) => {
-                    for obj in arr {
-                        let s = match Provider::parse(&obj) {
-                            Ok(val) => val,
-                            Err(e)  => return Err(format!("JSON decode error: {} in {}", e, obj )),
-                        };
-                        provs.push(s);
-                    }
+                    arr.iter().filter_map(|obj| {
+                        match Provider::parse(&obj) {
+                            Ok(val) => Some(val),
+                            Err(e)  => {
+                                print!("JSON decode error: {} in {}", e, obj );
+                                None
+                            }
+                        }
+                    }).collect()
                 },
                 other => return Err(format!("Expected Array but got {:?}", other)),
             },
@@ -181,18 +181,18 @@ impl Client for WebClient {
         let mut body = String::new();
         res.read_to_string(&mut body).unwrap();
 
-        let mut provs = vec![];
-
-        match Json::from_str(&body) {
+        let mut provs = match Json::from_str(&body) {
             Ok(prov_json) => match prov_json {
                 Json::Array(arr) => {
-                    for obj in arr {
-                        let s = match BaseProvider::parse(&obj) {
-                            Ok(val) => val,
-                            Err(e)  => return Err(format!("JSON decode error: {} in {}", e, obj )),
-                        };
-                        provs.push(s);
-                    }
+                    arr.iter().filter_map(|obj| {
+                        match BaseProvider::parse(&obj) {
+                            Ok(val) => Some(val),
+                            Err(e)  => {
+                                println!("JSON decode error: {} in {}", e, obj );
+                                None
+                            },
+                        }
+                    }).collect()
                 },
                 other => return Err(format!("Expected Array but got {:?}", other)),
             },

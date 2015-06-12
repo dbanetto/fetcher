@@ -64,6 +64,8 @@ pub trait Client { //FIXME: Provide better error handling with a descriptive enu
     fn get_base_providers(&self) -> Result<Vec<self::BaseProvider>, String>;
 }
 
+// FIXME: refactor this mess. Macro?
+
 impl BaseProvider { //FIXME: Provide better error handling with a descriptive enum
 
     /// Parse BaseProvider from a Json Object
@@ -228,7 +230,7 @@ impl Series {
                     Some(val) => {
                         match val {
                             &Json::Object(ref o) => o.clone(),
-                            err @ _ => return Err(format!("media_type is not a Json Object as expected but a {:?}", err)),
+                            err @ _ => return Err(format!("media_type_options is not a Json Object as expected but a {:?}", err)),
                         }
                     },
                     _ => return Err("Missing media_type_options".to_string()),
