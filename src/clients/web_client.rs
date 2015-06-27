@@ -79,7 +79,8 @@ impl WebClient {
     /// client.get("/api/");
     /// ```
     pub fn get(&self, path: &str) -> hyper::error::Result<Response> {
-        // FIXME: build_url cannot be asserted to be valid
+        // FIXME: handle build_url fail case
+        // FIXME: Change return type
         let full_url = self.build_url(path).unwrap();
         let mut client = hyper::Client::new();
         let res = client.get(full_url)
@@ -137,9 +138,18 @@ impl Client for WebClient {
         Ok(series)
     }
 
+    /// Get a list of Providers
     ///
+    /// # Example
     ///
+    /// ```
+    /// use fetcher::clients::Client;
+    /// use fetcher::clients::WebClient;
     ///
+    /// let client = WebClient::new("http://127.0.0.1/").unwrap();
+    ///
+    /// client.get_providers();
+    /// ```
     fn get_providers(&self) -> Result<Vec<Provider>, String> {
         let mut res = match self.get("/provider/?format=fetch") {
             Ok(r) => r,
@@ -169,9 +179,18 @@ impl Client for WebClient {
         Ok(provs)
     }
 
+    /// Get a list of Base Providers
     ///
+    /// # Example
     ///
+    /// ```
+    /// use fetcher::clients::Client;
+    /// use fetcher::clients::WebClient;
     ///
+    /// let client = WebClient::new("http://127.0.0.1/").unwrap();
+    ///
+    /// client.get_base_providers();
+    /// ```
     fn get_base_providers(&self) -> Result<Vec<BaseProvider>, String> {
         let mut res = match self.get("/provider/base/?format=fetch") {
             Ok(r) => r,
