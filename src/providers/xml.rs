@@ -1,22 +1,9 @@
+
 use providers::Provider;
 use clients::ProviderData;
 use url::Url;
 
-pub struct XmlProvider {
-    base_url: Url,
-    title_xpath: String,
-    link_xpath: String,
-}
-
-impl XmlProvider {
-    fn new(base_url: Url, title_xpath: String, link_xpath: String) -> Self {
-        XmlProvider {
-            base_url: base_url,
-            title_xpath: title_xpath,
-            link_xpath: link_xpath,
-        }
-    }
-}
+pub struct XmlProvider;
 
 impl Provider for XmlProvider {
 

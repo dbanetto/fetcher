@@ -8,8 +8,6 @@ pub use self::web_client::WebClient;
 use rustc_serialize::json;
 use rustc_serialize::json::Json;
 
-use std::collections::BTreeMap;
-
 ///
 ///
 ///

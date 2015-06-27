@@ -2,8 +2,6 @@
 //!
 //!
 use std::io::Read;
-use std::cell::RefCell;
-use std::rc::Rc;
 use url::{Url, ParseError};
 
 use hyper;
@@ -13,7 +11,6 @@ use hyper::mime::Mime;
 use hyper::header::Connection;
 use hyper::header::ConnectionOption;
 
-use rustc_serialize::json;
 use rustc_serialize::json::Json;
 
 use clients::{Client, SeriesData, ProviderData, BaseProviderData};
@@ -50,18 +47,16 @@ impl WebClient {
     ///
     fn build_url(&self, to_add: &str) -> Result<Url, ParseError> {
         let base_url = &self.url.to_string();
-        let new_url: String;
-        if base_url.ends_with('/') ^ to_add.starts_with('/') {
+        let new_url = if base_url.ends_with('/') ^ to_add.starts_with('/') {
             // One trailing or starting '/'
-            new_url = format!("{}{}", base_url, to_add).to_string();
+            format!("{}{}", base_url, to_add)
         } else if base_url.ends_with('/') && to_add.starts_with('/') {
             // Pair of trailing and starting '/'
-            new_url = format!("{}{}", base_url.trim_right_matches('/'), to_add).to_string();
+            format!("{}{}", base_url.trim_right_matches('/'), to_add)
         } else {
             // No trailing or starting '/'
-            new_url = format!("{}/{}", base_url, to_add).to_string();
-        }
-
+            format!("{}/{}", base_url, to_add)
+        };
         Url::parse(&new_url)
     }
 
@@ -81,7 +76,7 @@ impl WebClient {
     pub fn get(&self, path: &str) -> hyper::error::Result<Response> {
         // FIXME: build_url cannot be asserted to be valid
         let full_url = self.build_url(path).unwrap();
-        let mut client = hyper::Client::new();
+        let client = hyper::Client::new();
         let res = client.get(full_url)
             .header(Connection(vec![ConnectionOption::Close]))
             .header(ContentType("application/json".parse::<Mime>().unwrap()))
@@ -181,7 +176,7 @@ impl Client for WebClient {
         let mut body = String::new();
         res.read_to_string(&mut body).unwrap();
 
-        let mut provs = match Json::from_str(&body) {
+        let provs = match Json::from_str(&body) {
             Ok(prov_json) => match prov_json {
                 Json::Array(arr) => {
                     arr.iter().filter_map(|obj| {
