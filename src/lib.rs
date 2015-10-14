@@ -6,3 +6,4 @@ extern crate url;
 extern crate rustc_serialize;
 
 pub mod clients;
+pub mod providers;

@@ -8,12 +8,10 @@ pub use self::web_client::WebClient;
 use rustc_serialize::json;
 use rustc_serialize::json::Json;
 
-use std::collections::BTreeMap;
-
 ///
 ///
 ///
-pub struct Series {
+pub struct SeriesData {
     pub title: String,
     pub provider_id: u64,
     pub search_title: String,
@@ -26,7 +24,7 @@ pub struct Series {
 ///
 ///
 ///
-pub struct Provider {
+pub struct ProviderData {
     pub id: u64,
     pub name:String,
     pub regex_find_count: String,
@@ -37,7 +35,7 @@ pub struct Provider {
 ///
 ///
 ///
-pub struct BaseProvider {
+pub struct BaseProviderData {
     pub name: String,
     pub id: u64,
 }
@@ -51,28 +49,28 @@ pub trait Client { //FIXME: Provide better error handling with a descriptive enu
     ///
     ///
     ///
-    fn get_series(&self) -> Result<Vec<self::Series>, String>;
+    fn get_series(&self) -> Result<Vec<self::SeriesData>, String>;
 
     ///
     ///
     ///
-    fn get_providers(&self) -> Result<Vec<self::Provider>, String>;
+    fn get_providers(&self) -> Result<Vec<self::ProviderData>, String>;
 
     ///
     ///
     ///
-    fn get_base_providers(&self) -> Result<Vec<self::BaseProvider>, String>;
+    fn get_base_providers(&self) -> Result<Vec<self::BaseProviderData>, String>;
 }
 
 // FIXME: refactor this mess. Macro?
 
-impl BaseProvider { //FIXME: Provide better error handling with a descriptive enum
+impl BaseProviderData { //FIXME: Provide better error handling with a descriptive enum
 
-    /// Parse BaseProvider from a Json Object
+    /// Parse BaseProviderData from a Json Object
     ///
-    pub fn parse(json: &Json) -> Result<BaseProvider, String> {
+    pub fn parse(json: &Json) -> Result<BaseProviderData, String> {
         if let &Json::Object(ref obj) = json {
-            Ok(BaseProvider {
+            Ok(BaseProviderData {
                 name: match obj.get("name") {
                     Some(val) => {
                         match val {
@@ -98,13 +96,13 @@ impl BaseProvider { //FIXME: Provide better error handling with a descriptive en
     }
 }
 
-impl Provider {
+impl ProviderData {
 
-    /// Parse a Provider from a Json Object
+    /// Parse a ProviderData from a Json Object
     ///
-    pub fn parse(json: &Json) -> Result<Provider, String> {
+    pub fn parse(json: &Json) -> Result<ProviderData, String> {
         if let &Json::Object(ref obj) = json {
-            Ok(Provider {
+            Ok(ProviderData {
                 name: match obj.get("name") {
                     Some(val) => {
                         match val {
@@ -158,14 +156,14 @@ impl Provider {
     }
 }
 
-impl Series {
+impl SeriesData {
 
-    /// Parse Series from a Json Object
+    /// Parse SeriesData from a Json Object
     ///
-    pub fn parse(json: &Json) -> Result<Series, String> {
+    pub fn parse(json: &Json) -> Result<SeriesData, String> {
         // FIXME: refactor repeated match statements
         if let &Json::Object(ref obj) = json {
-            Ok(Series {
+            Ok(SeriesData {
                 title: match obj.get("title") {
                     Some(val) => {
                         match val {
@@ -249,7 +247,7 @@ mod test {
 
     #[test]
     fn test_series_parse() {
-        let s = Series::parse(&Json::from_str(r#"
+        let s = SeriesData::parse(&Json::from_str(r#"
             {
                 "title": "a",
                 "search_title": "b",
@@ -272,7 +270,7 @@ mod test {
 
     #[test]
     fn test_provider_parse() {
-        let p = Provider::parse(&Json::from_str(r#"
+        let p = ProviderData::parse(&Json::from_str(r#"
             {
                 "name": "a",
                 "id": 1,
@@ -291,7 +289,7 @@ mod test {
 
     #[test]
     fn test_base_provider_parse() {
-        let b = BaseProvider::parse(&Json::from_str(r#"
+        let b = BaseProviderData::parse(&Json::from_str(r#"
             {
                 "name": "a",
                 "id": 1
