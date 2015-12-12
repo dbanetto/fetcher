@@ -11,7 +11,8 @@ use hyper::mime::Mime;
 use hyper::header::Connection;
 use hyper::header::ConnectionOption;
 
-use rustc_serialize::json::Json;
+use serde_json;
+use serde_json::Value;
 
 use clients::{Client, SeriesData, ProviderData, BaseProviderData};
 
@@ -113,24 +114,10 @@ impl Client for WebClient {
         let mut body = String::new();
         res.read_to_string(&mut body).unwrap();
 
-        let series = match Json::from_str(&body) {
-            Ok(series_json) => match series_json {
-                Json::Array(arr) => {
-                    arr.iter().filter_map(|obj| {
-                        match SeriesData::parse(&obj) {
-                            Ok(val) => Some(val),
-                            Err(e)  => {
-                                println!("JSON decode error: {} in {}", e, obj);
-                                None
-                            },
-                        }
-                    }).collect()
-                },
-                other => return Err(format!("Expected Array but got {:?}", other)),
-            },
-            Err(e) => return Err(format!("JSON parse error: {}", e)),
-        };
-        Ok(series)
+        match serde_json::de::from_str(&body) {
+            Ok(ok) => ok,
+            Err(e) => Err(format!("{}", e))
+        }
     }
 
     /// Get a list of Providers
@@ -154,24 +141,10 @@ impl Client for WebClient {
         let mut body = String::new();
         res.read_to_string(&mut body).unwrap();
 
-        let provs = match Json::from_str(&body) {
-            Ok(prov_json) => match prov_json {
-                Json::Array(arr) => {
-                    arr.iter().filter_map(|obj| {
-                        match ProviderData::parse(&obj) {
-                            Ok(val) => Some(val),
-                            Err(e)  => {
-                                print!("JSON decode error: {} in {}", e, obj );
-                                None
-                            }
-                        }
-                    }).collect()
-                },
-                other => return Err(format!("Expected Array but got {:?}", other)),
-            },
-            Err(e) => return Err(format!("JSON parse error: {}", e)),
-        };
-        Ok(provs)
+        match serde_json::de::from_str(&body) {
+            Ok(ok) => ok,
+            Err(e) => Err(format!("{}", e))
+        }
     }
 
     /// Get a list of Base Providers
@@ -195,24 +168,10 @@ impl Client for WebClient {
         let mut body = String::new();
         res.read_to_string(&mut body).unwrap();
 
-        let provs = match Json::from_str(&body) {
-            Ok(prov_json) => match prov_json {
-                Json::Array(arr) => {
-                    arr.iter().filter_map(|obj| {
-                        match BaseProviderData::parse(&obj) {
-                            Ok(val) => Some(val),
-                            Err(e)  => {
-                                println!("JSON decode error: {} in {}", e, obj );
-                                None
-                            },
-                        }
-                    }).collect()
-                },
-                other => return Err(format!("Expected Array but got {:?}", other)),
-            },
-            Err(e) => return Err(format!("JSON parse error: {}", e)),
-        };
-        Ok(provs)
+        match serde_json::de::from_str(&body) {
+            Ok(ok) => ok,
+            Err(e) => Err(format!("{}", e))
+        }
     }
 
 }

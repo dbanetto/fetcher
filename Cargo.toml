@@ -1,25 +1,37 @@
 [package]
+authors = ["David Barnett <david@barnett.net.nz>"]
+license = "MIT"
 name = "fetcher"
 version = "0.0.1"
-license = "MIT"
-authors = ["David Barnett <david@barnett.net.nz>"]
+build = "build.rs"
 
 [features]
-unstable = []
+default = ["serde_codegen"]
+nightly = ["serde_macros"]
+
+[build-dependencies]
+serde_codegen = { version = "*", optional = true }
+syntex = "*"
+
+[[bin]]
+name = "mover"
+path = "src/mover/main.rs"
+
+[[bin]]
+name = "getter"
+path = "src/getter/main.rs"
+
+[dependencies]
+env_logger = "*"
+hyper = "*"
+log = "*"
+serde = "0.6.6"
+serde_json = "0.6.0"
+serde_macros = { version = "*", optional = true }
+sxd-document = "*"
+sxd-xpath = "*"
+url = "*"
 
 [lib]
 name = "fetcher"
 path = "src/lib.rs"
-
-[[bin]]
-name = "fetchd"
-path = "src/main.rs"
-
-[dependencies]
-hyper = "*"
-url = "*"
-rustc-serialize = "*"
-sxd-xpath = "*"
-sxd-document = "*"
-# log = "*"
-# env_logger = "*"
