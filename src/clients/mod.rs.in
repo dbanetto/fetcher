@@ -1,5 +1,6 @@
 
 pub mod web_client;
+
 pub use self::web_client::WebClient;
 
 use std::collections::BTreeMap;
@@ -52,17 +53,17 @@ pub trait Client { //FIXME: Provide better error handling with a descriptive enu
     ///
     ///
     ///
-    fn get_series(&self) -> Result<Vec<self::SeriesData>, String>;
+    fn get_series(&self) -> Result<Vec<SeriesData>, String>;
 
     ///
     ///
     ///
-    fn get_providers(&self) -> Result<Vec<self::ProviderData>, String>;
+    fn get_providers(&self) -> Result<Vec<ProviderData>, String>;
 
     ///
     ///
     ///
-    fn get_base_providers(&self) -> Result<Vec<self::BaseProviderData>, String>;
+    fn get_base_providers(&self) -> Result<Vec<BaseProviderData>, String>;
 }
 
 
