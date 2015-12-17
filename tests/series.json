@@ -1,0 +1,13 @@
+[
+  {
+    "title": "test_series",
+    "provider_id": 1
+    "search_title": "test series",
+    "current_count": 0,
+    "total_count": 1,
+    "media_type": "data",
+    "media_type_options": {
+      "special": 1
+    }
+  }
+]

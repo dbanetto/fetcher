@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1
+    "name": "test_prov",
+    "regex_find_count": "\d+",
+    "base_provider": "test",
+    "base_provider_options": {
+      "special": 1
+    }
+  }
+]
