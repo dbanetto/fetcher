@@ -131,17 +131,17 @@ mod tests {
 
         match client.get_series() {
             Ok(_) => (),
-            Err(_) => panic!(),
+            Err(e) => panic!("{}", e),
         }
 
         match client.get_providers() {
             Ok(_) => (),
-            Err(_) => panic!(),
+            Err(e) => panic!("{}", e),
         }
 
         match client.get_base_providers() {
             Ok(_) => (),
-            Err(_) => panic!(),
+            Err(e) => panic!("{}", e),
         }
 
     }

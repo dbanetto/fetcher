@@ -1,7 +1,7 @@
 [
   {
     "title": "test_series",
-    "provider_id": 1
+    "provider_id": 1,
     "search_title": "test series",
     "current_count": 0,
     "total_count": 1,
