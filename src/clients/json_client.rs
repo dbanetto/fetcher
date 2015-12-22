@@ -45,7 +45,7 @@ impl<'a> Client for JsonClient<'a> {
             return Err(format!("Error while reading file: {}", e));
         }
 
-        match serde_json::de::from_str(&contents) {
+        match serde_json::from_str(&contents) {
             Ok(ok) => Ok(ok),
             Err(e) => Err(format!("{}", e)),
         }
@@ -65,7 +65,7 @@ impl<'a> Client for JsonClient<'a> {
             return Err(format!("Error while reading file: {}", e));
         }
 
-        match serde_json::de::from_str(&contents) {
+        match serde_json::from_str(&contents) {
             Ok(ok) => Ok(ok),
             Err(e) => Err(format!("{}", e)),
         }
@@ -85,7 +85,7 @@ impl<'a> Client for JsonClient<'a> {
             return Err(format!("Error while reading file: {}", e));
         }
 
-        match serde_json::de::from_str(&contents) {
+        match serde_json::from_str(&contents) {
             Ok(ok) => Ok(ok),
             Err(e) => Err(format!("{}", e)),
         }

@@ -1,18 +1,9 @@
 [package]
 authors = ["David Barnett <david@barnett.net.nz>"]
+build = "build.rs"
 license = "MIT"
 name = "fetcher"
 version = "0.0.1"
-build = "build.rs"
-
-[features]
-default = ["serde_codegen"]
-unstable = ["serde_macros"]
-nightly = ["serde_macros"]
-
-[build-dependencies]
-serde_codegen = { version = "*", optional = true }
-syntex = "*"
 
 [[bin]]
 name = "mover"
@@ -22,16 +13,31 @@ path = "src/mover/main.rs"
 name = "getter"
 path = "src/getter/main.rs"
 
+[build-dependencies]
+syntex = "*"
+
+[build-dependencies.serde_codegen]
+optional = true
+version = "*"
+
 [dependencies]
 env_logger = "*"
 hyper = "*"
 log = "*"
 serde = "0.6.6"
 serde_json = "0.6.0"
-serde_macros = { version = "*", optional = true }
 sxd-document = "*"
 sxd-xpath = "*"
 url = "*"
+
+[dependencies.serde_macros]
+optional = true
+version = "*"
+
+[features]
+default = ["serde_codegen"]
+nightly = ["serde_macros"]
+unstable = ["serde_macros"]
 
 [lib]
 name = "fetcher"

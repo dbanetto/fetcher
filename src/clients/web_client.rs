@@ -12,7 +12,6 @@ use hyper::header::Connection;
 use hyper::header::ConnectionOption;
 
 use serde_json;
-use serde_json::Value;
 
 use clients::{Client, SeriesData, ProviderData, BaseProviderData};
 
@@ -114,8 +113,8 @@ impl Client for WebClient {
         let mut body = String::new();
         res.read_to_string(&mut body).unwrap();
 
-        match serde_json::de::from_str(&body) {
-            Ok(ok) => ok,
+        match serde_json::from_str(&body) {
+            Ok(ok) => Ok(ok),
             Err(e) => Err(format!("{}", e))
         }
     }
@@ -141,8 +140,8 @@ impl Client for WebClient {
         let mut body = String::new();
         res.read_to_string(&mut body).unwrap();
 
-        match serde_json::de::from_str(&body) {
-            Ok(ok) => ok,
+        match serde_json::from_str(&body) {
+            Ok(ok) => Ok(ok),
             Err(e) => Err(format!("{}", e))
         }
     }
@@ -168,8 +167,8 @@ impl Client for WebClient {
         let mut body = String::new();
         res.read_to_string(&mut body).unwrap();
 
-        match serde_json::de::from_str(&body) {
-            Ok(ok) => ok,
+        match serde_json::from_str(&body) {
+            Ok(ok) => Ok(ok),
             Err(e) => Err(format!("{}", e))
         }
     }
