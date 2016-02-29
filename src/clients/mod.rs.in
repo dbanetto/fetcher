@@ -6,8 +6,7 @@ pub use self::web_client::WebClient;
 pub use self::json_client::JsonClient;
 
 use std::collections::BTreeMap;
-use serde::{Serialize, Deserialize, Serializer, Deserializer};
-use serde_json;
+use serde::{Serializer, Deserializer};
 use serde_json::Value;
 
 ///
