@@ -6,12 +6,8 @@ name = "fetcher"
 version = "0.0.1"
 
 [[bin]]
-name = "mover"
-path = "src/mover/main.rs"
-
-[[bin]]
-name = "getter"
-path = "src/getter/main.rs"
+name = "fetcherd"
+path = "src/fetcherd/main.rs"
 
 [build-dependencies]
 syntex = "*"
@@ -29,6 +25,11 @@ serde_json = "^0.7.0"
 sxd-document = "*"
 sxd-xpath = "*"
 url = "*"
+yaml-rust = "0.3.0"
+
+[dependencies.serde_yaml]
+git = "https://github.com/zyphrus/serde-yaml"
+optional = false
 
 [dependencies.serde_macros]
 optional = true
@@ -41,4 +42,4 @@ unstable = ["serde_macros"]
 
 [lib]
 name = "fetcher"
-path = "src/lib.rs"
+path = "src/fetcher/lib.rs"

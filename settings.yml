@@ -1,0 +1,14 @@
+
+url: http://127.0.0.1:8000
+
+fetch:
+  enable: true
+  save_paths:
+    "*": "./unsorted"
+    "podcasts": "./podcasts"
+
+sort:
+  enable: true
+  save_path: "./sorted"
+  search_paths: 
+    - "./unsorted"

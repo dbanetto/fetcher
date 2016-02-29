@@ -10,13 +10,13 @@ Primarily used for getting scheduled released content like podcasts or
 web series.
 
 
-This repo provides two binaries `libfetcher` and `fetchd`
+This repo provides two binaries `libfetcher` and `fetcherd`
 
 ### libfecther
 
 To provide a library for fetcher
 
-### fetchd
+### fetcherd
 
 A daemon to fetch periodically using libfetcher.
 

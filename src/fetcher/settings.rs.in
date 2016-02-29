@@ -1,0 +1,42 @@
+use std::io::prelude::*;
+use std::fs::File;
+use std::path::Path;
+
+use serde_yaml;
+use serde::{Serializer, Deserializer};
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Settings {
+    pub url: String,
+    pub fetch: FetchSettings,
+    pub sort: SortSettings,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct FetchSettings {
+    pub enable: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SortSettings {
+    pub enable: bool,
+}
+
+impl Settings {
+    pub fn from_file(path: &Path) -> Result<Self, String> {
+        let mut file = match File::open(path) {
+            Ok(f) => f,
+            Err(e) => return Err(format!("Error while opening file: {}", e)),
+        };
+
+        let mut contents = String::new();
+        if let Err(e) = file.read_to_string(&mut contents) {
+            return Err(format!("Error while reading file: {}", e));
+        }
+
+        match serde_yaml::de::from_str(&contents) {
+            Ok(settings) => Ok(settings),
+            Err(e) => Err(format!("{:?}", e)),
+        }
+    }
+}

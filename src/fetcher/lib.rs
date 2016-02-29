@@ -8,6 +8,8 @@ extern crate hyper;
 extern crate url;
 extern crate serde;
 extern crate serde_json;
+extern crate serde_yaml;
 
 pub mod clients;
 pub mod providers;
+pub mod settings;
