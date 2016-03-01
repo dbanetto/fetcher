@@ -14,6 +14,8 @@ fn main() {
             return;
         }
     };
+    println!("{:?}", settings);
+
     let client = WebClient::new(&settings.url).unwrap();
 
     println!("Base Providers");

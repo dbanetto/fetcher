@@ -1,0 +1,8 @@
+url: http://
+fetch:
+  save_paths:
+    "type": "path"
+sort:
+  save_path: "sorted"
+  search_paths: 
+    - "unsorted"

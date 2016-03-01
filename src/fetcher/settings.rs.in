@@ -2,6 +2,8 @@ use std::io::prelude::*;
 use std::fs::File;
 use std::path::Path;
 
+use std::collections::BTreeMap;
+
 use serde_yaml;
 use serde::{Serializer, Deserializer};
 
@@ -14,12 +16,13 @@ pub struct Settings {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct FetchSettings {
-    pub enable: bool,
+    pub save_paths: BTreeMap<String, String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SortSettings {
-    pub enable: bool,
+    pub save_path: String,
+    pub search_paths: Vec<String>,
 }
 
 impl Settings {
@@ -39,4 +42,19 @@ impl Settings {
             Err(e) => Err(format!("{:?}", e)),
         }
     }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::path::Path;
+
+    #[test]
+    fn loads_settings() {
+        let settings  = Settings::from_file(&Path::new("tests/settings-good.yml")).unwrap();
+
+        assert_eq!("http://".to_owned(), settings.url);
+        assert_eq!("sorted".to_owned(), settings.sort.save_path);
+    }
+
 }
