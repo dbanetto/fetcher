@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `JsonClient` struct in crate `fetcher`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, JsonClient">
+
+    <title>fetcher::clients::json_client::JsonClient - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../../index.html'>fetcher</a>::<wbr><a href='../index.html'>clients</a>::<wbr><a href='index.html'>json_client</a></p><script>window.sidebarCurrent = {name: 'JsonClient', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>fetcher</a>::<wbr><a href='../index.html'>clients</a>::<wbr><a href='index.html'>json_client</a>::<wbr><a class='struct' href=''>JsonClient</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-95' class='srclink' href='../../../src/fetcher///home/travis/build/zyphrus/fetcher/target/debug/build/fetcher-7001c85b5dacf19c/out/client.mod.rs.html#233-237' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct JsonClient&lt;'a&gt; {
+    // some fields omitted
+}</pre><div class='docblock'><p>A <code>Client</code> that is backed by data from JSON files.</p>
+
+<blockquote>
+<p>note: The files are read every time a <code>Client</code> function is called</p>
+</blockquote>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'a&gt; <a class='struct' href='../../../fetcher/clients/json_client/struct.JsonClient.html' title='fetcher::clients::json_client::JsonClient'>JsonClient</a>&lt;'a&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(series_path: &amp;'a <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, providers_path: &amp;'a <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, base_providers_path: &amp;'a <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='struct' href='../../../fetcher/clients/json_client/struct.JsonClient.html' title='fetcher::clients::json_client::JsonClient'>JsonClient</a>&lt;'a&gt;</code></h4>
+<div class='docblock'><p>Create <code>JsonClient</code> with paths pointing directly to each
+file used for backing data.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;'a&gt; <a class='trait' href='../../../fetcher/clients/trait.Client.html' title='fetcher::clients::Client'>Client</a> for <a class='struct' href='../../../fetcher/clients/json_client/struct.JsonClient.html' title='fetcher::clients::json_client::JsonClient'>JsonClient</a>&lt;'a&gt;</code></h3><div class='impl-items'><h4 id='method.get_series' class='method'><code>fn <a href='../../../fetcher/clients/trait.Client.html#method.get_series' class='fnname'>get_series</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../../../fetcher/clients/struct.SeriesData.html' title='fetcher::clients::SeriesData'>SeriesData</a>&gt;, <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code></h4>
+<h4 id='method.get_providers' class='method'><code>fn <a href='../../../fetcher/clients/trait.Client.html#method.get_providers' class='fnname'>get_providers</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../../../fetcher/clients/struct.ProviderData.html' title='fetcher::clients::ProviderData'>ProviderData</a>&gt;, <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code></h4>
+<h4 id='method.get_base_providers' class='method'><code>fn <a href='../../../fetcher/clients/trait.Client.html#method.get_base_providers' class='fnname'>get_base_providers</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../../../fetcher/clients/struct.BaseProviderData.html' title='fetcher::clients::BaseProviderData'>BaseProviderData</a>&gt;, <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;</code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "fetcher";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    
+    <script defer src="../../../search-index.js"></script>
+</body>
+</html>

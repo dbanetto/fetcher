@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["json_client",""],["web_client","A Web client to Fetcher Web UI"]],"struct":[["BaseProviderData",""],["ProviderData",""],["SeriesData",""]],"trait":[["Client",""]]});
